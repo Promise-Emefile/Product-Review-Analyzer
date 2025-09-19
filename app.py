@@ -28,9 +28,14 @@ openai = OpenAI()
 
 # Set up Selenium driver
 def setup_driver():
-    options = Options()
-    options.add_argument("--headless")
-    return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.binary_location = "/usr/bin/chromium-browser"
+
+    return webdriver.Chrome(executable_path="/usr/bin/chromedriver", options=chrome_options)
 
 # Scrape reviews from product page
 def get_reviews(url, review_class="review-text"):
