@@ -10,7 +10,8 @@ import time
 
 # Load OpenAI API key
 load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
+api_key = st.secrets["OPENAI_API_KEY"]
+openai = OpenAI(api_key=api_key)
 
 # Validate API key
 if not api_key:
@@ -22,8 +23,6 @@ elif api_key.strip() != api_key:
 else:
     st.success("API key loaded successfully.")
 
-# Initialize OpenAI client
-openai = OpenAI()
 
 # Set up Selenium driver
 def setup_driver():
