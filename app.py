@@ -1,8 +1,7 @@
 import streamlit as st
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
@@ -33,7 +32,8 @@ def setup_driver():
     chrome_options.add_argument("--disable-gpu")
     chrome_options.binary_location = "/usr/bin/chromium"
 
-    return webdriver.Chrome(executable_path="/usr/bin/chromedriver", options=chrome_options)
+    service = Service("/usr/bin/chromedriver")
+    return webdriver.Chrome(service=service, options=chrome_options)
 
 # Scrape reviews from product page
 def get_reviews(url, review_class="review-text"):
