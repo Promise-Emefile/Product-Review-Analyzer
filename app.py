@@ -37,14 +37,16 @@ def setup_driver():
     return webdriver.Chrome(service=service, options=chrome_options)
 
 # Scrape reviews from product page
-def get_reviews(url):
+def get_reviews(url, review_selector=".marked-content"):
     driver = setup_driver()
     driver.get(url)
-    time.sleep(3)
-    review_elements = driver.find_elements(By.CSS_SELECTOR, ".review-card")
+    time.sleep(5)  # Give time for dynamic content to load
+
+    review_elements = driver.find_elements(By.CSS_SELECTOR, review_selector)
     reviews = [r.text for r in review_elements if r.text.strip()]
     driver.quit()
     return reviews
+
 
 # Summarize reviews using OpenAI
 def summarize_reviews(reviews):
