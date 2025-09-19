@@ -1,0 +1,29 @@
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.log
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+pip-wheel-metadata/
+
+# Environment variables
+.env
+
+# Streamlit secrets (if used)
+.streamlit/secrets.toml
+
+# Jupyter notebook checkpoints (optional)
+.ipynb_checkpoints/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE settings (optional)
+.vscode/
+.idea/
