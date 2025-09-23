@@ -45,7 +45,7 @@ def get_reviews(url, review_selector=".comments-from-verified-purchases .feedbac
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-	try:
+try:
 		WebDriverWait(driver, 15).until(
 			EC.presence_of_all_elements_located((By.CSS_SELECTOR, review_selector))
 	)
