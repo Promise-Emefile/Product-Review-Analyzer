@@ -56,7 +56,7 @@ def get_reviews(url, review_selector=".comments-from-verified-purchases .feedbac
     review_elements = driver.find_elements(By.CSS_SELECTOR, review_selector)
     reviews = [r.text for r in review_elements if r.text.strip()]
     driver.quit()
-    return reviews
+    return reviews
 
 # Summarize reviews using OpenAI
 def summarize_reviews(reviews):
