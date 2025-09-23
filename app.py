@@ -37,16 +37,26 @@ def setup_driver():
     return webdriver.Chrome(service=service, options=chrome_options)
 
 # Scrape reviews from product page
-def get_reviews(url, review_selector=".marked-content"):
+def get_reviews(url, review_selector=".comments-from-verified-purchases .feedback"):
     driver = setup_driver()
     driver.get(url)
-    time.sleep(5)  # Give time for dynamic content to load
+
+    # Wait for reviews to load
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+
+    try:
+        WebDriverWait(driver, 15).until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, review_selector))
+        )
+    except Exception as e:
+        # If timeout, maybe still check for reviews
+        pass
 
     review_elements = driver.find_elements(By.CSS_SELECTOR, review_selector)
     reviews = [r.text for r in review_elements if r.text.strip()]
     driver.quit()
-    return reviews
-
+    return reviews
 
 # Summarize reviews using OpenAI
 def summarize_reviews(reviews):
