@@ -37,22 +37,25 @@ def setup_driver():
     return webdriver.Chrome(service=service, options=chrome_options)
 
 # Scrape reviews from product page
-def get_reviews(url):
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+import time
+
+def setup_driver():
+    chrome_options = Options()
+    # chrome_options.add_argument("--headless")  # Try commenting this out first for debugging
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+
+def get_reviews(url, review_class="review-text"):
     driver = setup_driver()
     driver.get(url)
-    time.sleep(5)
-
-    # scroll down to load reviews
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     time.sleep(3)
 
-    # find review titles and bodies
-    titles = driver.find_elements(By.CSS_SELECTOR, "article.-pvs.-hr._bet h3")
-    bodies = driver.find_elements(By.CSS_SELECTOR, "article.-pvs.-hr._bet p")
-
-    reviews = []
-    for i in range(min(len(titles), len(bodies))):
-        reviews.append(f"{titles[i].text} - {bodies[i].text}")
+    review_elements = driver.find_elements(By.CLASS_NAME, review_class)
+    reviews = [r.text for r in review_elements if r.text.strip()]
 
     driver.quit()
     return reviews
