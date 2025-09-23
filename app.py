@@ -41,22 +41,21 @@ def get_reviews(url, review_selector=".comments-from-verified-purchases .feedbac
     driver = setup_driver()
     driver.get(url)
 
-    # Wait for reviews to load
+#waiting for review to load
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
 
     try:
-        WebDriverWait(driver, 15).until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, review_selector))
-        )
+	WebDriverWait(driver, 15).until(
+	    EC.presence_of_all_elements_located((By.CSS_SELECTOR, review_selector))
+	)
     except Exception as e:
-        # If timeout, maybe still check for reviews
-        pass
-
+	pass
     review_elements = driver.find_elements(By.CSS_SELECTOR, review_selector)
     reviews = [r.text for r in review_elements if r.text.strip()]
     driver.quit()
-    return reviews
+    return reviews
+
 
 # Summarize reviews using OpenAI
 def summarize_reviews(reviews):
