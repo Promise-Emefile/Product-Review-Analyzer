@@ -37,23 +37,23 @@ def setup_driver():
     return webdriver.Chrome(service=service, options=chrome_options)
 
 # Scrape reviews from product page
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-def get_reviews(url, review_selector=".comments-from-verified-purchases .feedback"):
+def get_reviews(url):
     driver = setup_driver()
     driver.get(url)
+    time.sleep(5)
 
-    # Waiting for reviews to load
-    try:
-        WebDriverWait(driver, 15).until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, review_selector))
-        )
-    except Exception as e:
-        pass
+    # scroll down to load reviews
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    time.sleep(3)
 
-    review_elements = driver.find_elements(By.CSS_SELECTOR, review_selector)
-    reviews = [r.text for r in review_elements if r.text.strip()]
+    # find review titles and bodies
+    titles = driver.find_elements(By.CSS_SELECTOR, "article.-pvs.-hr._bet h3")
+    bodies = driver.find_elements(By.CSS_SELECTOR, "article.-pvs.-hr._bet p")
+
+    reviews = []
+    for i in range(min(len(titles), len(bodies))):
+        reviews.append(f"{titles[i].text} - {bodies[i].text}")
+
     driver.quit()
     return reviews
 
